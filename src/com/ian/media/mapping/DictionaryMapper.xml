@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ian.media.dao.DictionaryMapper" >
+  <resultMap id="BaseResultMap" type="com.ian.media.model.Dictionary" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, code, name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from dictionary
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  
+   <select id="get" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dictionary
+        where 1=1
+        <if test="id != null">
+            and id=#{id,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null">
+            and name like CONCAT('%', #{name}, '%')
+        </if>
+        <if test="code != null">
+            and code =#{code,jdbcType=VARCHAR}
+        </if>
+        <if test="pageIndex !=null">
+            limit #{pageIndex},#{rows}
+        </if>
+    </select>
+    
+   <select id="getCount" resultType="int" parameterType="java.util.HashMap">
+        select
+        count(*)
+        from dictionary
+        where 1=1
+        <if test="id != null">
+            and id=#{id,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null">
+            and name like CONCAT('%', #{name}, '%')
+        </if>
+         <if test="code != null">
+            and code =#{code,jdbcType=VARCHAR}
+        </if>
+        <if test="pageIndex !=null">
+            limit #{pageIndex},#{rows}
+        </if>
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from dictionary
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ian.media.model.Dictionary" >
+    insert into dictionary (id, type, code, 
+      name)
+    values (#{id,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ian.media.model.Dictionary" >
+    insert into dictionary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ian.media.model.Dictionary" >
+    update dictionary
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ian.media.model.Dictionary" >
+    update dictionary
+    set type = #{type,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
